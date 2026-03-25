@@ -1,0 +1,1050 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ular Tangga Kemesraan 🔞</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #fff5f7 0%,
+          #ffe5ec 50%,
+          #ffc9dd 100%
+        );
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      .fancy-title {
+        font-family: "Pacifico", cursive;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      @keyframes pulse-glow {
+        0%,
+        100% {
+          box-shadow:
+            0 0 20px rgba(255, 215, 0, 0.4),
+            0 0 40px rgba(255, 215, 0, 0.2);
+        }
+        50% {
+          box-shadow:
+            0 0 30px rgba(255, 215, 0, 0.6),
+            0 0 60px rgba(255, 215, 0, 0.3);
+        }
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(-5deg);
+        }
+        75% {
+          transform: rotate(5deg);
+        }
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      @keyframes confetti-fall {
+        to {
+          transform: translateY(100vh) rotate(360deg);
+        }
+      }
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
+      }
+      .animate-pulse-glow {
+        animation: pulse-glow 2s ease-in-out infinite;
+      }
+      .animate-shake {
+        animation: shake 0.5s ease-in-out;
+      }
+      .animate-slide-up {
+        animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        animation: confetti-fall 3s linear infinite;
+      }
+      .board-tile {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .glass-morphism {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+      .gradient-text {
+        background: linear-gradient(135deg, #ff1493, #ff69b4, #ffb6c1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(255, 20, 147, 0.4);
+      }
+      .btn-primary:active {
+        transform: translateY(0);
+      }
+
+      /* ===== DICE 3D ===== */
+      .dice-scene {
+        perspective: 600px;
+      }
+      .dice-cube {
+        width: 60px;
+        height: 60px;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 1s cubic-bezier(0.17, 0.67, 0.25, 1);
+      }
+      .dice-face {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        background: white;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        box-shadow:
+          inset 0 0 8px rgba(0, 0, 0, 0.15),
+          0 6px 16px rgba(0, 0, 0, 0.25);
+      }
+      .face1 {
+        transform: rotateY(0deg) translateZ(30px);
+      }
+      .face2 {
+        transform: rotateY(180deg) translateZ(30px);
+      }
+      .face3 {
+        transform: rotateY(90deg) translateZ(30px);
+      }
+      .face4 {
+        transform: rotateY(-90deg) translateZ(30px);
+      }
+      .face5 {
+        transform: rotateX(90deg) translateZ(30px);
+      }
+      .face6 {
+        transform: rotateX(-90deg) translateZ(30px);
+      }
+
+      @keyframes dicePhysics {
+        0% {
+          transform: rotateX(0) rotateY(0) scale(1);
+        }
+        25% {
+          transform: rotateX(180deg) rotateY(220deg) scale(1.15);
+        }
+        50% {
+          transform: rotateX(420deg) rotateY(380deg) scale(1.1);
+        }
+        75% {
+          transform: rotateX(620deg) rotateY(520deg) scale(1.05);
+        }
+        100% {
+          transform: rotateX(720deg) rotateY(720deg) scale(1);
+        }
+      }
+      .rolling {
+        animation: dicePhysics 1s cubic-bezier(0.22, 0.61, 0.36, 1);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const { useState, useEffect, useRef, useCallback } = React;
+
+      // ==================== GAME DATA ====================
+      const SNAKES = [
+        { start: 98, end: 78 },
+        { start: 95, end: 75 },
+        { start: 87, end: 36 },
+        { start: 64, end: 60 },
+        { start: 62, end: 19 },
+        { start: 54, end: 34 },
+        { start: 49, end: 11 },
+        { start: 17, end: 7 },
+      ];
+
+      const LADDERS = [
+        { start: 4, end: 14 },
+        { start: 9, end: 31 },
+        { start: 21, end: 42 },
+        { start: 28, end: 84 },
+        { start: 51, end: 67 },
+        { start: 71, end: 91 },
+        { start: 80, end: 99 },
+        { start: 20, end: 38 },
+      ];
+
+      const MYSTERY_BOXES = [13, 27, 35, 46, 53, 68, 73, 82, 88, 93];
+
+      const FIXED_CHALLENGES = [
+        { tile: 6, icon: "💋", text: "Cium bibir pasangan selama 10 detik" },
+        {
+          tile: 16,
+          icon: "🤗",
+          text: "Peluk dari belakang sambil bisik hal nakal di telinga",
+        },
+        {
+          tile: 25,
+          icon: "💆",
+          text: "Massage leher dan bahu pasangan selama 1 menit",
+        },
+        {
+          tile: 32,
+          icon: "👀",
+          text: "Slow dance sambil tatap mata selama 30 detik",
+        },
+        { tile: 39, icon: "👅", text: "Cium leher pasangan 5 kali" },
+        { tile: 44, icon: "👂", text: "Jilat telinga pasangan pelan-pelan" },
+        {
+          tile: 52,
+          icon: "👕",
+          text: "Lepas satu pakaian pasangan (pilih sendiri)",
+        },
+        { tile: 56, icon: "🍷", text: "Body shot - pasangan pilih area" },
+        {
+          tile: 63,
+          icon: "💃",
+          text: "Lap dance untuk pasangan selama 1 menit",
+        },
+        { tile: 69, icon: "🔥", text: "Posisi 69 selama 1 menit" },
+        {
+          tile: 77,
+          icon: "👅",
+          text: "Jilat dari leher ke bawah (bebas sampai mana)",
+        },
+        {
+          tile: 81,
+          icon: "💦",
+          text: "Oral service untuk pasangan selama 2 menit",
+        },
+        {
+          tile: 86,
+          icon: "🎯",
+          text: "Pasangan pilih satu area tubuh untuk dijilat",
+        },
+        { tile: 92, icon: "🩲", text: "Strip dance sampai nude" },
+        {
+          tile: 97,
+          icon: "🎭",
+          text: "Role play: pasangan pilih karakter fantasinya",
+        },
+      ];
+
+      const MYSTERY_POOL = [
+        "French kiss hot selama 2 menit non-stop",
+        "Jilat seluruh tubuh pasangan dari atas sampai bawah",
+        "Finger pasangan sambil cium bibir sampai klimaks",
+        "Pasangan yang masturbate, kamu yang tonton (15menit)",
+        "Kamu yang masturbate, pasangan yang tonton (15menit)",
+        "The Sun : Hidupkan lampu sampai game berakhir",
+        "Oral marathon: lanjut sampai pasangan bilang stop",
+        "Sex toys time: pilih mainan dan pakai untuk pasangan",
+        "Posisi favorit pasangan: lakukan selama 5 menit full",
+        "Wild card: pasangan perintah apapun (15 menit)",
+        "Blindfold: pasangan kontrol semua, kamu pasrah (10 menit)",
+        "Ice play: es batu untuk stimulasi seluruh tubuh",
+        "Handcuff: ikat tangan, pasangan yang handle semuanya",
+        "Edging game: bawa sampai hampir klimaks, tahan, ulangi 3x",
+        "Standing 69: test keseimbangan dan kekompakan",
+        "Public fantasy: berpura-pura di tempat umum (di rumah)",
+        "Quickie challenge: finish dalam 5 menit",
+        "French kiss hot selama 15 menit non-stop",
+        "Tantric: slow sensual touch selama 10 menit",
+        "Freestyle ekstrim: kombinasi semua yang udah dilakukan tadi",
+      ];
+
+      // ==================== UTILITIES ====================
+      const rollDice = () => {
+        const a = new Uint32Array(1);
+        crypto.getRandomValues(a);
+        return (a[0] % 6) + 1;
+      };
+
+      const getRandomMystery = (used) => {
+        const available = MYSTERY_POOL.filter((c) => !used.includes(c));
+        if (available.length === 0) return MYSTERY_POOL[0];
+        const a = new Uint32Array(1);
+        crypto.getRandomValues(a);
+        return available[a[0] % available.length];
+      };
+
+      const getTilePosition = (n) => {
+        const row = Math.floor((n - 1) / 10);
+        const col = (n - 1) % 10;
+        const evenRow = row % 2 === 0;
+        return { row: 9 - row, col: evenRow ? col : 9 - col };
+      };
+
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+      // ==================== SVG PIECES ====================
+      const Snake = ({ start, end }) => {
+        const s = getTilePosition(start),
+          e = getTilePosition(end);
+        const sx = s.col * 10 + 5,
+          sy = s.row * 10 + 5;
+        const ex = e.col * 10 + 5,
+          ey = e.row * 10 + 5;
+        const dx = ex - sx,
+          dy = ey - sy;
+        const mx = (sx + ex) / 2 + dy * 0.2,
+          my = (sy + ey) / 2 - dx * 0.2;
+        const d = `M ${sx} ${sy} Q ${mx} ${my} ${ex} ${ey}`;
+        return (
+          <g>
+            <path
+              d={d}
+              fill="none"
+              stroke="white"
+              strokeWidth="2.6"
+              strokeLinecap="round"
+            />
+            <path
+              d={d}
+              fill="none"
+              stroke="#E91E63"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+            />
+            <circle
+              cx={sx}
+              cy={sy}
+              r="1.2"
+              fill="#E91E63"
+              stroke="white"
+              strokeWidth="0.3"
+            />
+          </g>
+        );
+      };
+
+      const Ladder = ({ start, end }) => {
+        const s = getTilePosition(start),
+          e = getTilePosition(end);
+        const sx = s.col * 10 + 5,
+          sy = s.row * 10 + 5;
+        const ex = e.col * 10 + 5,
+          ey = e.row * 10 + 5;
+        const dx = ex - sx,
+          dy = ey - sy;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        const nx = -dy / len,
+          ny = dx / len;
+        const r = 0.8;
+        const rungs = Array.from({ length: 3 }, (_, i) => {
+          const t = (i + 1) / 4;
+          const x = sx + dx * t,
+            y = sy + dy * t;
+          return (
+            <line
+              key={i}
+              x1={x - nx * r}
+              y1={y - ny * r}
+              x2={x + nx * r}
+              y2={y + ny * r}
+              stroke="#FFD54F"
+              strokeWidth="0.5"
+            />
+          );
+        });
+        return (
+          <g>
+            <line
+              x1={sx - nx * r}
+              y1={sy - ny * r}
+              x2={ex - nx * r}
+              y2={ey - ny * r}
+              stroke="white"
+              strokeWidth="1.8"
+            />
+            <line
+              x1={sx + nx * r}
+              y1={sy + ny * r}
+              x2={ex + nx * r}
+              y2={ey + ny * r}
+              stroke="white"
+              strokeWidth="1.8"
+            />
+            <line
+              x1={sx - nx * r}
+              y1={sy - ny * r}
+              x2={ex - nx * r}
+              y2={ey - ny * r}
+              stroke="#FFD54F"
+              strokeWidth="1.1"
+            />
+            <line
+              x1={sx + nx * r}
+              y1={sy + ny * r}
+              x2={ex + nx * r}
+              y2={ey + ny * r}
+              stroke="#FFD54F"
+              strokeWidth="1.1"
+            />
+            {rungs}
+          </g>
+        );
+      };
+
+      // ==================== CONFETTI ====================
+      const Confetti = () => {
+        const colors = ["#FF1493", "#FF69B4", "#FFB6C1", "#FFD700", "#FF6B9D"];
+        const pieces = Array.from({ length: 50 }, (_, i) => ({
+          id: i,
+          left: Math.random() * 100,
+          delay: Math.random() * 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+        }));
+        return (
+          <div className="fixed inset-0 pointer-events-none z-50">
+            {pieces.map((p) => (
+              <div
+                key={p.id}
+                className="confetti"
+                style={{
+                  left: `${p.left}%`,
+                  backgroundColor: p.color,
+                  animationDelay: `${p.delay}s`,
+                }}
+              />
+            ))}
+          </div>
+        );
+      };
+
+      // ==================== SCREENS ====================
+      const LandingPage = ({ onStart }) => (
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="text-center animate-slide-up">
+            <h1 className="fancy-title text-6xl md:text-8xl gradient-text mb-6 animate-float">
+              Ular Tangga
+            </h1>
+            <h2 className="fancy-title text-4xl md:text-6xl gradient-text mb-8">
+              Kemesraan
+            </h2>
+            <div
+              className="text-6xl mb-8 animate-float"
+              style={{ animationDelay: "0.5s" }}
+            >
+              🔞
+            </div>
+            <p className="text-xl md:text-2xl text-pink-800 mb-12 font-medium">
+              Khusus couple dewasa yang sudah siap bermain
+            </p>
+            <button
+              onClick={onStart}
+              className="btn-primary text-white px-12 py-4 rounded-full text-xl font-bold shadow-2xl"
+            >
+              Mulai Game 💕
+            </button>
+            <p className="mt-8 text-sm text-pink-600">
+              ⚠️ Semua aktivitas harus consensual (saling setuju)
+            </p>
+          </div>
+        </div>
+      );
+
+      const PlayerSetup = ({ onStart }) => {
+        const [player1, setPlayer1] = useState("Player 1");
+        const [player2, setPlayer2] = useState("Player 2");
+        const [emoji1, setEmoji1] = useState("❤️");
+        const [emoji2, setEmoji2] = useState("💙");
+        const emojis = [
+          "❤️",
+          "💙",
+          "💚",
+          "💛",
+          "💜",
+          "🧡",
+          "🖤",
+          "🤍",
+          "💖",
+          "💕",
+        ];
+        return (
+          <div className="min-h-screen flex items-center justify-center p-4">
+            <div className="glass-morphism rounded-3xl p-8 md:p-12 max-w-md w-full shadow-2xl animate-slide-up">
+              <h2 className="text-3xl font-bold gradient-text text-center mb-8">
+                Setup Pemain
+              </h2>
+              <div className="space-y-6">
+                {[
+                  ["Player 1", player1, setPlayer1, emoji1, setEmoji1],
+                  ["Player 2", player2, setPlayer2, emoji2, setEmoji2],
+                ].map(([label, val, setVal, em, setEm]) => (
+                  <div key={label}>
+                    <label className="block text-pink-800 font-semibold mb-2">
+                      {label}
+                    </label>
+                    <input
+                      type="text"
+                      value={val}
+                      onChange={(e) => setVal(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-pink-300 focus:border-pink-500 outline-none transition-all"
+                      maxLength={20}
+                    />
+                    <div className="flex gap-2 mt-2 flex-wrap">
+                      {emojis.map((e) => (
+                        <button
+                          key={e}
+                          onClick={() => setEm(e)}
+                          className={`text-2xl p-2 rounded-lg transition-all ${em === e ? "bg-pink-200 scale-125" : "hover:bg-pink-100"}`}
+                        >
+                          {e}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-8 p-4 bg-pink-100 rounded-xl text-center">
+                <p className="text-pink-800 font-medium">
+                  💡 Suit dulu untuk tentukan siapa yang mulai!
+                </p>
+              </div>
+              <button
+                onClick={() =>
+                  onStart({
+                    player1: {
+                      name: player1.trim() || "Player 1",
+                      emoji: emoji1,
+                    },
+                    player2: {
+                      name: player2.trim() || "Player 2",
+                      emoji: emoji2,
+                    },
+                  })
+                }
+                className="btn-primary w-full mt-6 py-4 rounded-xl text-white font-bold text-lg"
+              >
+                Mulai Permainan 🎲
+              </button>
+            </div>
+          </div>
+        );
+      };
+
+      const ChallengePopup = ({ challenge, isMystery, onClose, onSkip }) => {
+        const [revealed, setRevealed] = useState(!isMystery);
+        useEffect(() => {
+          if (isMystery) setTimeout(() => setRevealed(true), 1000);
+        }, [isMystery]);
+        return (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="glass-morphism rounded-3xl p-8 max-w-md w-full shadow-2xl animate-slide-up">
+              {isMystery && !revealed ? (
+                <div className="text-center">
+                  <div className="text-8xl mb-4 animate-shake">🎁</div>
+                  <h3 className="text-3xl font-bold gradient-text mb-4">
+                    MYSTERY BOX!
+                  </h3>
+                  <p className="text-pink-600">Tunggu reveal...</p>
+                </div>
+              ) : (
+                <>
+                  <div className="text-center mb-6">
+                    <div className="text-6xl mb-4">
+                      {isMystery ? "🔥" : challenge.icon || "💕"}
+                    </div>
+                    <h3 className="text-2xl font-bold gradient-text mb-4">
+                      {isMystery ? "SPICY CHALLENGE!" : "TANTANGAN!"}
+                    </h3>
+                    <p className="text-lg text-pink-900 leading-relaxed">
+                      {challenge.text || challenge}
+                    </p>
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={onSkip}
+                      className="flex-1 py-3 rounded-xl border-2 border-pink-300 text-pink-700 font-semibold hover:bg-pink-50 transition-all"
+                    >
+                      Skip
+                    </button>
+                    <button
+                      onClick={onClose}
+                      className="flex-1 btn-primary py-3 rounded-xl text-white font-bold"
+                    >
+                      Selesai ✓
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        );
+      };
+
+      const WinScreen = ({ winner, onRestart }) => (
+        <div className="fixed inset-0 bg-gradient-to-br from-pink-400 via-pink-300 to-rose-400 flex items-center justify-center p-4 z-50">
+          <Confetti />
+          <div className="text-center animate-slide-up">
+            <div className="text-8xl mb-6 animate-float">{winner.emoji}</div>
+            <h2 className="text-5xl md:text-7xl font-bold text-white mb-4 drop-shadow-lg">
+              SELAMAT!
+            </h2>
+            <h3 className="text-3xl md:text-5xl font-bold text-white mb-6 drop-shadow-lg">
+              {winner.name}
+            </h3>
+            <div className="glass-morphism rounded-3xl p-8 mb-8 max-w-md mx-auto">
+              <p className="text-2xl md:text-3xl font-bold text-pink-900 mb-2">
+                ANDA BERHAK
+              </p>
+              <p className="text-2xl md:text-3xl font-bold text-pink-900 mb-4">
+                MEMBERI PERINTAH!
+              </p>
+              <p className="text-lg text-pink-700 italic">
+                Yang kalah turuti kemauan yang menang ya 😏
+              </p>
+            </div>
+            <button
+              onClick={onRestart}
+              className="btn-primary px-12 py-4 rounded-full text-xl font-bold text-white shadow-2xl"
+            >
+              Main Lagi 🎲
+            </button>
+          </div>
+        </div>
+      );
+
+      // ==================== DICE ROTATIONS ====================
+      const DICE_ROTATIONS = {
+        1: "rotateX(0deg)    rotateY(0deg)",
+        2: "rotateX(0deg)    rotateY(180deg)",
+        3: "rotateX(0deg)    rotateY(-90deg)",
+        4: "rotateX(0deg)    rotateY(90deg)",
+        5: "rotateX(-90deg)  rotateY(0deg)",
+        6: "rotateX(90deg)   rotateY(0deg)",
+      };
+
+      // ==================== GAME BOARD ====================
+      const GameBoard = ({ players, onWin }) => {
+        const [positions, setPositions] = useState([1, 1]);
+        const [currentTurn, setCurrentTurn] = useState(0);
+        const [isRolling, setIsRolling] = useState(false); // UI only (button label/opacity)
+        const [diceFace, setDiceFace] = useState(1);
+        const [isDiceRolling, setIsDiceRolling] = useState(false);
+        const [showChallenge, setShowChallenge] = useState(false);
+        const [currentChallenge, setCurrentChallenge] = useState(null);
+        const [isMystery, setIsMystery] = useState(false);
+        const [usedMysteries, setUsedMysteries] = useState([]);
+        const [message, setMessage] = useState("");
+        const [bonusRoll, setBonusRoll] = useState(false);
+
+        // ---- LOCK: useRef so the guard is synchronous, never stale ----
+        const lockRef = useRef(false);
+        // track live positions in a ref so async loops always read current value
+        const posRef = useRef([1, 1]);
+
+        const syncPos = (turn, val) => {
+          posRef.current = posRef.current.map((p, i) => (i === turn ? val : p));
+          setPositions([...posRef.current]);
+        };
+
+        // ---- challenge gate: returns a Promise that resolves when player taps Selesai/Skip ----
+        // stored as a ref so performRoll can await it
+        const challengeResolveRef = useRef(null);
+
+        const openChallenge = (challenge, mystery) => {
+          return new Promise((resolve) => {
+            challengeResolveRef.current = resolve;
+            setCurrentChallenge(challenge);
+            setIsMystery(mystery);
+            setShowChallenge(true);
+          });
+        };
+
+        // ---- core movement + roll logic (fully async, sequential) ----
+        const performRoll = async (turn) => {
+          setIsRolling(true);
+          setIsDiceRolling(true);
+          setMessage("");
+
+          const result = rollDice();
+
+          // shuffle dice faces visually
+          for (let i = 0; i < 10; i++) {
+            setDiceFace(Math.floor(Math.random() * 6) + 1);
+            await sleep(70);
+          }
+          setDiceFace(result);
+          await sleep(600); // slightly faster settle
+          setIsDiceRolling(false);
+
+          const isSix = result === 6;
+          if (isSix) {
+            setMessage(`🎲 Dapet 6! ${players[turn].name} lempar lagi!`);
+            setBonusRoll(true);
+          } else {
+            setBonusRoll(false);
+          }
+
+          // step-by-step movement
+          const start = posRef.current[turn];
+          let target = start + result;
+          if (target > 100) target = 100 - (target - 100);
+
+          let cur = start;
+          while (cur !== target) {
+            cur += cur < target ? 1 : -1;
+            syncPos(turn, cur);
+            await sleep(80); // snappier steps
+          }
+
+          await sleep(150);
+
+          // snake / ladder
+          const snake = SNAKES.find((s) => s.start === target);
+          const ladder = LADDERS.find((l) => l.start === target);
+          let finalPos = target;
+
+          if (snake) {
+            setMessage("Kena ular! 🐍");
+            await sleep(400);
+            syncPos(turn, snake.end);
+            finalPos = snake.end;
+            await sleep(200);
+          } else if (ladder) {
+            setMessage("Naik tangga! 🪜");
+            await sleep(400);
+            syncPos(turn, ladder.end);
+            finalPos = ladder.end;
+            await sleep(200);
+          } else if (target === 100) {
+            setMessage("🎉 Sampai finish!");
+            await sleep(600);
+            onWin(players[turn]);
+            return; // game over, keep lock
+          }
+
+          // check for challenge on finalPos
+          const fixed = FIXED_CHALLENGES.find((c) => c.tile === finalPos);
+          const mystery = MYSTERY_BOXES.includes(finalPos);
+
+          if (fixed) {
+            await openChallenge(fixed, false);
+          } else if (mystery) {
+            const pool = await new Promise((res) => {
+              setUsedMysteries((prev) => {
+                res(prev);
+                return prev;
+              });
+            });
+            const mysteryText = getRandomMystery(pool);
+            setUsedMysteries((prev) => [...prev, mysteryText]);
+            await openChallenge(mysteryText, true);
+          }
+
+          // all done — now decide turn
+          if (isSix) {
+            // same player rolls again, unlock immediately
+            setMessage(`🎲 Dapet 6! ${players[turn].name} lempar lagi!`);
+          } else {
+            setMessage("");
+            setCurrentTurn(1 - turn); // switch NOW, synchronously inside async flow
+            await sleep(50); // tiny yield so React can re-render turn indicator
+          }
+
+          // release lock — pion sudah berhenti, turn sudah pindah
+          lockRef.current = false;
+          setIsRolling(false);
+        };
+
+        // ---- button handler: useRef lock prevents any spam ----
+        const handleRollDice = () => {
+          if (lockRef.current) return; // hard synchronous guard
+          lockRef.current = true;
+          performRoll(currentTurn);
+        };
+
+        const handleChallengeClose = () => {
+          setShowChallenge(false);
+          setCurrentChallenge(null);
+          setMessage("");
+          setBonusRoll(false);
+          if (challengeResolveRef.current) {
+            challengeResolveRef.current();
+            challengeResolveRef.current = null;
+          }
+        };
+
+        const handleSkipChallenge = () => {
+          setShowChallenge(false);
+          setCurrentChallenge(null);
+          setMessage("Challenge di-skip");
+          setBonusRoll(false);
+          if (challengeResolveRef.current) {
+            challengeResolveRef.current();
+            challengeResolveRef.current = null;
+          }
+        };
+
+        return (
+          <div className="min-h-screen p-2 md:p-4">
+            {/* Player Stats */}
+            <div className="glass-morphism rounded-2xl p-4 mb-4 max-w-4xl mx-auto">
+              <div className="flex justify-between items-center">
+                {[0, 1].map((i) => (
+                  <div
+                    key={i}
+                    className={`flex items-center gap-3 ${i === 1 ? "flex-row-reverse" : ""} ${currentTurn === i ? "opacity-100 scale-105" : "opacity-60"} transition-all`}
+                  >
+                    <span className="text-4xl">{players[i].emoji}</span>
+                    <div className={i === 1 ? "text-right" : ""}>
+                      <p className="font-bold text-pink-900">
+                        {players[i].name}
+                      </p>
+                      <p className="text-sm text-pink-600">
+                        Posisi: {positions[i]}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 text-center">
+                <p className="text-lg font-bold gradient-text">
+                  ▸ Giliran: {players[currentTurn].name}{" "}
+                  {players[currentTurn].emoji}
+                </p>
+                {message && (
+                  <p className="text-pink-600 mt-2 font-medium animate-pulse">
+                    {message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Board */}
+            <div className="max-w-4xl mx-auto mb-6">
+              <div className="glass-morphism rounded-3xl p-2 md:p-4 shadow-2xl">
+                <svg viewBox="0 0 100 100" className="w-full h-auto">
+                  {/* Tiles */}
+                  {Array.from({ length: 100 }, (_, i) => {
+                    const n = i + 1;
+                    const pos = getTilePosition(n);
+                    const isSnake = SNAKES.some((s) => s.start === n);
+                    const isLadder = LADDERS.some((l) => l.start === n);
+                    const isMys = MYSTERY_BOXES.includes(n);
+                    const ch = FIXED_CHALLENGES.find((c) => c.tile === n);
+                    let fill =
+                      (pos.row + pos.col) % 2 === 0 ? "#FF69B4" : "#FFB6C1";
+                    if (isSnake) fill = "#FFE5EC";
+                    if (isLadder) fill = "#FFF8DC";
+                    return (
+                      <g key={n}>
+                        <rect
+                          x={pos.col * 10}
+                          y={pos.row * 10}
+                          width={10}
+                          height={10}
+                          fill={fill}
+                          stroke="#FFF"
+                          strokeWidth="0.2"
+                        />
+                        <text
+                          x={pos.col * 10 + 1}
+                          y={pos.row * 10 + 2.5}
+                          fontSize="1.5"
+                          fill="#FFFFFF"
+                          fontWeight="bold"
+                        >
+                          {n}
+                        </text>
+                        {isMys && (
+                          <text
+                            x={pos.col * 10 + 5}
+                            y={pos.row * 10 + 6.5}
+                            fontSize="4"
+                            textAnchor="middle"
+                          >
+                            🎁
+                          </text>
+                        )}
+                        {ch && (
+                          <text
+                            x={pos.col * 10 + 5}
+                            y={pos.row * 10 + 6.5}
+                            fontSize="3"
+                            textAnchor="middle"
+                          >
+                            {ch.icon}
+                          </text>
+                        )}
+                      </g>
+                    );
+                  })}
+                  {/* Snakes & Ladders */}
+                  {SNAKES.map((s, i) => (
+                    <Snake key={i} start={s.start} end={s.end} />
+                  ))}
+                  {LADDERS.map((l, i) => (
+                    <Ladder key={i} start={l.start} end={l.end} />
+                  ))}
+                  {/* Players */}
+                  {positions.map((pos, i) => {
+                    const p = getTilePosition(pos);
+                    const ox = i === 0 ? -1.8 : 1.8;
+                    return (
+                      <g key={i}>
+                        <circle
+                          cx={p.col * 10 + 5 + ox}
+                          cy={p.row * 10 + 5.8}
+                          r="2.2"
+                          fill="white"
+                          opacity="0.9"
+                        />
+                        <text
+                          x={p.col * 10 + 5 + ox}
+                          y={p.row * 10 + 7}
+                          fontSize="4.2"
+                          textAnchor="middle"
+                        >
+                          {players[i].emoji}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+            </div>
+
+            {/* Dice */}
+            <div className="text-center max-w-md mx-auto">
+              <div className="dice-scene mb-4 flex justify-center">
+                <div
+                  className={`dice-cube ${isDiceRolling ? "rolling" : ""}`}
+                  style={{ transform: DICE_ROTATIONS[diceFace] }}
+                >
+                  <div className="dice-face face1">⚀</div>
+                  <div className="dice-face face2">⚁</div>
+                  <div className="dice-face face3">⚂</div>
+                  <div className="dice-face face4">⚃</div>
+                  <div className="dice-face face5">⚄</div>
+                  <div className="dice-face face6">⚅</div>
+                </div>
+              </div>
+              <button
+                onClick={handleRollDice}
+                disabled={isRolling}
+                className={`btn-primary px-8 py-4 rounded-2xl text-white font-bold text-xl shadow-2xl w-full ${isRolling ? "opacity-60" : "cursor-pointer"}`}
+              >
+                {isRolling
+                  ? "Rolling... 🎲"
+                  : bonusRoll
+                    ? `🎲 Lempar Lagi! ${players[currentTurn].name}`
+                    : `Lempar Dadu — ${players[currentTurn].name} 🎲`}
+              </button>
+            </div>
+
+            {/* Challenge Popup */}
+            {showChallenge && currentChallenge && (
+              <ChallengePopup
+                challenge={currentChallenge}
+                isMystery={isMystery}
+                onClose={handleChallengeClose}
+                onSkip={handleSkipChallenge}
+              />
+            )}
+          </div>
+        );
+      };
+
+      // ==================== APP ====================
+      const App = () => {
+        const [screen, setScreen] = useState("landing");
+        const [players, setPlayers] = useState(null);
+        const [winner, setWinner] = useState(null);
+        return (
+          <>
+            {screen === "landing" && (
+              <LandingPage onStart={() => setScreen("setup")} />
+            )}
+            {screen === "setup" && (
+              <PlayerSetup
+                onStart={(p) => {
+                  setPlayers([p.player1, p.player2]);
+                  setScreen("game");
+                }}
+              />
+            )}
+            {screen === "game" && players && (
+              <GameBoard
+                players={players}
+                onWin={(w) => {
+                  setWinner(w);
+                  setScreen("win");
+                }}
+              />
+            )}
+            {screen === "win" && winner && (
+              <WinScreen
+                winner={winner}
+                onRestart={() => {
+                  setScreen("landing");
+                  setPlayers(null);
+                  setWinner(null);
+                }}
+              />
+            )}
+          </>
+        );
+      };
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
